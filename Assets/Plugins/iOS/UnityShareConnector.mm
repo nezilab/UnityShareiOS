@@ -22,12 +22,6 @@ extern "C"
         [UnityShare share:UnityGetGLViewController() text:_text url:_url imagename:_imgname];
         //*/
     }
-    
-    void close()
-    {
-        printf("----close_----------");
-        //UnitySendMessage((char *)[_gameobjname UTF8String], (char *)[_callbackname UTF8String], "");
-    }
 }
 
 @implementation UnityShareConnector
