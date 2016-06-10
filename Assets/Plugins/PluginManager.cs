@@ -7,49 +7,15 @@ using System.Runtime.InteropServices;
 public class PluginManager : MonoBehaviour
 {
 	[DllImport("__Internal")]
-	private static extern void _openShare(string text , string url , string imgname);
+	private static extern void _openShare(string text , string url , string imgname , string gameobjname = "" , string callbackname = "");
 
-	public static void OpenShare(string text , string url , string imgname)
+	public static void OpenShare(string text , string url , string imgname , string gameobjname = "" , string callbackname = "")
 	{
-		Debug.Log ("PluginManager : openShare");
+		Debug.Log ("[ PluginManager ] : openShare");
 		if (Application.platform == RuntimePlatform.IPhonePlayer) 
 		{
-			Debug.Log ("PluginManager : platform : iOS");
-			_openShare(text,url,imgname);
-
+			Debug.Log ("[ PluginManager ] : platform : iOS");
+			_openShare(text,url,imgname,gameobjname,callbackname);
 		}
-			
 	}
-
-	IEnumerator sample()
-	{
-		// ログ出力  
-		Debug.Log ("1");  
-
-		// 1秒待つ  
-		yield return new WaitForSeconds (1.0f);  
-
-		// ログ出力  
-		Debug.Log ("2");  
-
-		// 2秒待つ  
-		yield return new WaitForSeconds (2.0f);  
-
-		// ログ出力  
-		Debug.Log ("3"); 
-	}
-	/*
-	IEnumerator CaptureScreenshot(string fileName)
-	{
-		Application.CaptureScreenshot(fileName);
-
-		var filePath = Path.Combine(Application.persistentDataPath, fileName);
-		while (!File.Exists(fullPath))
-		{
-			yield return null;
-		}
-
-		// 保存できている
-	}
-	//*/
 }

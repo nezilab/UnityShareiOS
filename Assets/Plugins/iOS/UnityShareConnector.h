@@ -5,5 +5,5 @@
 #endif /* UnityShareConnector_h */
 #import <Foundation/Foundation.h>
 @interface UnityShareConnector : NSObject
-
+- (void)closeCallBack;
 @end

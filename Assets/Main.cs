@@ -8,41 +8,63 @@ using UnityEngine.UI;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using Nezilab.Log;
 
-public class Main : MonoBehaviour {
-
-	//private PluginManager pluginmanager;
+public class Main : MonoBehaviour 
+{
+	private const string traceClassName = "[ Main ]";
 	public Button btnShare;
 
-	// Use this for initialization
-	void Start () {
-		Debug.Log ("Start");
-
-		//pluginmanager = new PluginManager ();
-
+	void Start () 
+	{
+		NeziLog.debug (traceClassName, "Start : " + gameObject.name);
 		btnShare.onClick.AddListener (shareHandler);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	void Update () 
+	{
+		
+	}
+
+	private string GetScreenShotPath(string name)
+	{
+		string path = "";
+		switch (Application.platform) {
+		case RuntimePlatform.IPhonePlayer:
+			path = Application.persistentDataPath + "/" + name;
+			break;
+		case RuntimePlatform.Android:
+			path = Application.persistentDataPath + "/" + name;
+			break;
+		default:
+			path = name;
+			break;
+		}
+		return path;
 	}
 
 	void shareHandler()
 	{
-		Debug.Log ("shareHandler_start");
-		//PluginManager.OpenShare ("hoge", "http://nezilab.com", "homu");
-		StartCoroutine (WaitAndCap("hoge.png")); 
-		Debug.Log ("shareHandler_end");
+		NeziLog.debug (traceClassName, "shareHandler");
+		btnShare.enabled = false;
+		StartCoroutine (startCap("moge","hoge.png")); 
 	}
 
-	IEnumerator WaitAndCap(string filename) 
+	void shareCallback()
 	{
-		var filePath = Path.Combine(Application.persistentDataPath, filename);
-		Debug.Log (filePath);
+		NeziLog.debug (traceClassName, "shareCallback");
+		btnShare.enabled = true;
+	}
+
+	public IEnumerator startCap(string text , string filename) 
+	{
+		NeziLog.debug (traceClassName, "startCap");
+
+		var filePath = GetScreenShotPath(filename);
+		NeziLog.debug (traceClassName, "startCap : filePath : "+filePath);
 		if (File.Exists (filePath)) 
 		{
-			print ("img_true");
+			NeziLog.debug (traceClassName, "img ");
 			File.Delete (filePath);
 			yield return StartCoroutine (imgDeleteWait(filePath));
 		}
@@ -50,11 +72,11 @@ public class Main : MonoBehaviour {
 		Application.CaptureScreenshot (filename);
 		while(!File.Exists(filePath))
 		{
-			print ("Saving");
+			NeziLog.debug (traceClassName, "save");
 			yield return null;    
 		}
-		print ("save_end");
-		PluginManager.OpenShare ("hoge", "http://nezilab.com", filePath);
+		NeziLog.debug (traceClassName, "save_end");
+		PluginManager.OpenShare (text, "http://nezilab.com", filePath,gameObject.name,"shareCallback");
 		yield break;
 	}
 
@@ -62,10 +84,11 @@ public class Main : MonoBehaviour {
 	{  
 		while(System.IO.File.Exists(filename))
 		{
-			print ("-----img_true");
+			NeziLog.debug (traceClassName, "yes_img");
 			yield return null;    
 		}
-		print ("-----no_img");
+		NeziLog.debug (traceClassName, "no_img");
+		//print ("-----no_img");
 		yield break;
-	} 
+	}
 }
