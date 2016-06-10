@@ -1,0 +1,3 @@
+# UnityShareiOS
+UunityでiOSでシェアできるようにするためのプロジェクト
+UnityShare.swiftはこちらから持ってきてください。
